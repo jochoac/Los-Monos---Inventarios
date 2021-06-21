@@ -6,7 +6,7 @@ create table Usuario
 (
 Nombre_usu nvarchar(50) primary key,
 Nombre_empleado nvarchar(50) not null,
-Contraseña nvarchar(50) not null,
+ContraseÃ±a nvarchar(50) not null,
 DNI bigint not null,
 Telefono bigint,
 Correo nvarchar(100) not null,
@@ -74,21 +74,20 @@ Cantidad_producto bigint not null
 alter table Detalle_entrega add subtotal bigint not null
 alter table Detalle_entrega add verificado nvarchar (3) not null default 'NO'
 
-select * from detalle_entrega
 ---------------------------------Procedimientos almacenados----------------------------------------------------
 go
----------------------------------Iniciar sesión/Usuarios-----------------------------------------------------------
+---------------------------------Iniciar sesiÃ³n/Usuarios-----------------------------------------------------------
 create procedure loggin
 @nombre nvarchar (30),
-@contraseña nvarchar(30),
+@contraseÃ±a nvarchar(30),
 @logg int output,
 @mensaje nvarchar(50)output
 as
 Select @logg=count(h.Nombre_usu) from Usuario h
-where Nombre_usu = @nombre and Contraseña = @contraseña
+where Nombre_usu = @nombre and ContraseÃ±a = @contraseÃ±a
 if (@logg > 0) 
 select @mensaje = 'Bienvenido '+h.Cargo +' '+h.Nombre_empleado from Usuario h
-where Nombre_usu = @nombre and Contraseña = @contraseña 
+where Nombre_usu = @nombre and ContraseÃ±a = @contraseÃ±a 
 go
 grant execute on loggin to monos
 go
@@ -156,8 +155,6 @@ insert into producto values(@Cod_producto,@Nombre_producto,@Marca,@Existencia,@T
 go
 grant execute on Insertar_Producto_su to monos
 go
-
-select * from producto
 
 create proc Actualizar_Producto_administrador
 @C_producto nvarchar(50),
@@ -245,8 +242,6 @@ grant execute on Actualizar_loc to monos
 go
 
 --------------------------------------------------Pedidos-------------------------------------------------------
-select * from producto
-
 create proc Registrar_Pedido
 @Nombre_usu nvarchar (30),
 @hora nvarchar (30),
@@ -256,8 +251,6 @@ insert into Pedido(Nombre_usu, hora, Codigo_pedido) values(@Nombre_usu,@hora,@co
 go
 grant execute on Registrar_pedido to monos
 go
-
-select * from Pedido
 
 Create proc registrar_3pedido
 @Codigo_pedido nvarchar (50),
@@ -281,10 +274,6 @@ insert into Entrega(Nombre_usu, Nombre_local, hora, total) values(@Nombre_u,@Nom
 go
 grant execute on Registrar_entrega to monos
 go
-
-select * from entrega
-select * from detalle_entrega
-
 
 Create proc registrar_3entrega
 @Codigo_en bigint,
@@ -318,11 +307,6 @@ go
 grant execute on busca_producto to monos
 go
 
-busca_producto_1 'para'
-
-select * from producto
-
-
 create proc buscar_marca
 @marca nvarchar(100)
 as
@@ -334,9 +318,6 @@ create proc buscar_tipo
 as
 select * from producto where Tipo like '%'+@Tipo+'%'
 go
-
-buscar_tipo 'aceites'
-go 
 
 create proc buscar_Mercancia_administrador
 @Nombre nvarchar (100)
@@ -395,7 +376,7 @@ go
 create view Consulta_Entregas
 as
 select 
-e.Codigo as Código,
+e.Codigo as CÃ³digo,
 l.Nombre_local as Nombre,  
 u.Nombre_empleado as Empleado, 
 e.Fecha_entrega as Fecha,
@@ -409,15 +390,13 @@ go
 create view Consulta_Pedidos
 as
 select
-p.Codigo_pedido as Código,
+p.Codigo_pedido as CÃ³digo,
 u.Nombre_empleado as Nombre,
 p.fecha_pedido as Fecha
 from Pedido p inner join Usuario u on p.Nombre_usu = u.Nombre_usu
 go
 grant select on Consulta_Pedidos to monos
 go
-
-
 
 create view Consulta_Mercancia_administrador
 as
@@ -437,9 +416,9 @@ create view Consulta_Locales
 as
 Select 
 Nombre_local as Nombre,
-Telefono_local as Teléfono,
+Telefono_local as TelÃ©fono,
 Correo_local as correo,
-Direccion_local as Dirección
+Direccion_local as DirecciÃ³n
 from tLocal
 go
 grant select on Consulta_Locales to monos
@@ -448,7 +427,7 @@ go
 create procedure Registrar_Usu
 @Nombre_usu nvarchar (30),
 @Nombre_Empleado nvarchar (50),
-@Contraseña_usu nvarchar (50),
+@ContraseÃ±a_usu nvarchar (50),
 @ID_usu bigint,
 @Telefono_usu bigint,
 @Correo_usu nvarchar (50),
@@ -461,7 +440,7 @@ Select @Contador = count (Nombre_usu) from Usuario where Nombre_usu = @Nombre_us
 if (@Contador > 0)
 select @mensaje = 'El usuario ya ha sido registrado'
 else
-insert into Usuario values (@Nombre_usu, @Nombre_Empleado, @Contraseña_usu, @ID_usu, @Telefono_usu, @Correo_usu, @Estado_usu, @Cargo_usu)
+insert into Usuario values (@Nombre_usu, @Nombre_Empleado, @ContraseÃ±a_usu, @ID_usu, @Telefono_usu, @Correo_usu, @Estado_usu, @Cargo_usu)
 select * from Usuario
 go
 
@@ -471,50 +450,24 @@ create proc resumen_dia
 @fecha nvarchar(30),
 @local nvarchar(50)
 as
-select e.Codigo as Código, p.Cod_producto as 'Código Producto', p.Nombre_producto as 'Nombre Producto', d.Cantidad_producto as Cantidad,
+select e.Codigo as CÃ³digo, p.Cod_producto as 'CÃ³digo Producto', p.Nombre_producto as 'Nombre Producto', d.Cantidad_producto as Cantidad,
 d.verificado as 'Verificado?', e.Fecha_entrega as Fecha, e.Hora, l.Nombre_Local as 'Local', p.Marca, p.Precio, d.Subtotal as Subtotal from tLocal l
 inner join Entrega e on l.Nombre_local = e.Nombre_local 
 inner join Detalle_entrega d on e.Codigo_entrega = d.Codigo_entrega
 inner join Producto p on d.Codigo_producto = p.Cod_producto where e.fecha_entrega = @fecha and l.Nombre_local = @local
-
-
 
 create proc resumen_fechas
 @fecha1 nvarchar(30),
 @fecha2 nvarchar(30),
 @local nvarchar(50)
 as
-select e.Codigo as Código, p.Cod_producto as 'Código Producto', p.Nombre_producto as 'Nombre Producto', d.Cantidad_producto as Cantidad,
+select e.Codigo as CÃ³digo, p.Cod_producto as 'CÃ³digo Producto', p.Nombre_producto as 'Nombre Producto', d.Cantidad_producto as Cantidad,
 d.verificado as 'Verificado?', e.Fecha_entrega as Fecha, e.Hora, l.Nombre_Local as 'Local', p.Marca, p.Precio, d.Subtotal as Subtotal from tLocal l
 inner join Entrega e on l.Nombre_local = e.Nombre_local 
 inner join Detalle_entrega d on e.Codigo_entrega = d.Codigo_entrega
 inner join Producto p on d.Codigo_producto = p.Cod_producto where e.fecha_entrega >= @fecha1 and e.Fecha_entrega <= @fecha2 and l.Nombre_local = @local
 order by p.Cod_producto asc
 
-
-resumen_fechas '" + fecha + "','" + fecha2 + "','" + local + "'
-
-resumen_fechas '2021-02-08','2021-02-28','Local 137'
-
-codigo_entrega
-nombre_producto
-bodega
-cantidad
-fecha
-hora
-nombre local
-marca
-precio
-subtotal
-
-select * from Entrega
-resumen_dia '2021-02-05'
-----------------------------------------------------------------------------------------------------------------
-delete from usuario where nombre_usu = 'admin'
-insert into Usuario values('admin','Nombre','password',123,7231234,'a@a.a','activo','Empleado')
-insert into usuario values('usuario','Juan','1234',321654987,1212121212,'b@b.b','activo','Empleado')
-insert into usuario values('user','Nicolas','12345',32987,1212,'ba@ba.ba','activo','Empleado')
-insert into Usuario values('administrador','Alfred Duque','12345',123,123456789,'q@q.q','activo','administrador')
 ---------------------------------------------------Vistas-------------------------------------------------------
 go
 create view vista_usuarios
@@ -522,35 +475,23 @@ as
 Select Nombre_usu as Usuario, 
 Nombre_empleado as Nombres, 
 DNI as "Doc. Identidad",
-Telefono as Teléfono,
+Telefono as TelÃ©fono,
 Correo,
 Estado,
 Cargo from Usuario
 go
 
-select * from vista_usuarios
-go
 create view vista_locales
 as
 Select 
 Nombre_local as Nombre,
-Telefono_local as Teléfono,
+Telefono_local as TelÃ©fono,
 Correo_local as correo,
-Direccion_local as Dirección
+Direccion_local as DirecciÃ³n
 from tLocal
 go
 grant select on vista_locales to monos
 go
-
-insert into producto values('cod_1','nombre prod','marca prod',50,'liquido')
-
-insert into Pedido(Nombre_usu) values ('admin')
-
-
-select * from Pedido
-select * from Usuario
-
-select * from producto
 
 grant select on Usuario to monos
 grant select on producto to monos
@@ -560,29 +501,6 @@ grant select on vista_productos to monos
 grant select on vista_usuarios to monos
 grant select on Entrega to monos
 grant select on Detalle_entrega to monos
-
-
-select * from producto
-select * from vista_productos
-select * from vista_usuarios
-select * from Entrega
-
-Select * from Usuario where Nombre_usu = 'admin' and Contraseña = 'password' 
-
-update producto set Existencia = 200
-
-delete from pedido
-
-select * from producto
-
-select * from Entrega
-select * from Detalle_entrega
-
-select * from Pedido
-select * from Detalle_Pedido
-
-select * from Detalle_entrega where Codigo_entrega = 1
-
 
 go
 create proc detalle
@@ -601,48 +519,6 @@ producto inner join Detalle_pedido on producto.Cod_producto = Detalle_pedido.Cod
 inner join Pedido on Detalle_pedido.Codigo_pedido = Pedido.Codigo_pedido where Pedido.Codigo_pedido = @codigo
 go
 
-detalle_p 'cod_1'
-
-create database test
-use test
-
-
-create table prueba
-(
-a nvarchar (10), 
-b nvarchar (50)
-)
-
-insert into prueba values ('ABC_001','s')
-insert into prueba values ('ABC_002','s')
-insert into prueba values ('ABC_003','s')
-insert into prueba values ('ABC_004','s')
-insert into prueba values ('ABC_005','s')
-insert into prueba values ('ABC_006','s')
-insert into prueba values ('ABC_007','s')
-insert into prueba values ('ABC_008','s')
-insert into prueba values ('ABC_009','s')
-insert into prueba values ('ABC_010','s')
-
-insert into prueba values ('xyz_001','q')
-insert into prueba values ('xyz_002','q')
-insert into prueba values ('xyz_003','q')
-insert into prueba values ('xyz_004','q')
-insert into prueba values ('xyz_005','q')
-insert into prueba values ('xyz_006','q')
-insert into prueba values ('xyz_007','q')
-insert into prueba values ('xyz_008','q')
-insert into prueba values ('xyz_009','q')
-insert into prueba values ('xyz_010','q')
-
-select top 1 a from prueba where a like 'ABC_%' order by a desc
-go
-
-
-select * from producto
-select * from entrega
-
-go
 create proc buscar_historial_entregas
 @nomproducto nvarchar(100)
 as
@@ -653,11 +529,6 @@ inner join Usuario on Entrega.Nombre_usu = usuario.Nombre_usu
 where producto.Nombre_producto like @nomproducto+'%' or producto.Cod_producto like @nomproducto+'%' order by Entrega.Fecha_entrega desc
 go
 
-
-
-buscar_historial_entregas 'keratina'
-
-go
 create proc buscar_historial_pedidos
 @nomproducto nvarchar(100)
 as
@@ -667,36 +538,6 @@ inner join pedido on Detalle_pedido.Codigo_pedido = pedido.Codigo_pedido
 inner join Usuario on Pedido.Nombre_usu = usuario.Nombre_usu
 where producto.Nombre_producto like @nomproducto+'%' or producto.Cod_producto like @nomproducto+'%' order by Pedido.Fecha_pedido desc
 go
-
-buscar_historial_pedidos '7707271929469'
-
-
-
-delete from producto where Cod_producto = '048155903135'
-select * from tLocal
-select Cod_producto from producto where Cod_producto like 'maq%' order by Cod_Producto desc
-
-
-update producto set nombre_producto = 'Pestañina definicion verde Bardot', marca = 'BARDOT' where Cod_producto = '7703799346511'
-
-
-
-select * from usuario
-
-insert into Usuario values ('vanessa', 'Vanessa','1010222998',1010222998,1111111,'a@a.a','activo','administrador')
-
-update usuario set cargo = 'su' where nombre_usu = 'admin'
-
-
-select * from producto
-
-update usuario set cargo = 'su' where nombre_usu = 'admin'
-
-delete from usuario where nombre_usu = 'admin'
-
-select * from usuario
-
-
 
 create proc eliminar_3entrega
 @Codigo_en bigint,
@@ -726,16 +567,3 @@ verificado = @verificado
 where Codigo_entrega = @Codigo_en and Codigo_producto = @cod_pro
 update producto set Existencia -= @C_producto where Cod_producto = @cod_pro
 
-
-ENT_665
-ACC_1002368724
-select * from detalle_entrega
-
-actualizar_3entrega 3,'MAQ_822593486',20,'si'
-
-select * from producto where Cod_producto = 'MAQ_822593486'
-
-delete from detalle_entrega
-delete from detalle_pedido
-delete from entrega
-delete from pedido
