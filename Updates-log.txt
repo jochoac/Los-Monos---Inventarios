@@ -1,0 +1,3 @@
+4/5/2021: Version Los Monos - Inventarios v6.2021, arreglo de error al actualizar después de registrar un producto
+14/5/2021: Version Los Monos - Inventarios v6.1.2021, eliminar columnas de pasillo y bodega, añadir Marca como criterio de búsqueda
+27/5/2021: Version Los Monos - Inventarios v6.2.2021, añadir búsqueda por marca en el menú de entregas.
