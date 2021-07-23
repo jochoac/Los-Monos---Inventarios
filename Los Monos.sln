@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VistaLM", "VistaLM\VistaLM.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logica", "Logica\Logica.csproj", "{50901C35-E833-498D-A6DD-4B56A5049825}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Los Monos - Inventarios v6.2.2021", "Los Monos - Inventarios v6.2.2021\Los Monos - Inventarios v6.2.2021.vdproj", "{883F1DF6-895B-407E-AE10-ED88F62C4124}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Los Monos - Inventarios v7.2021", "Los Monos - Inventarios v7.2021\Los Monos - Inventarios v7.2021.vdproj", "{8E4F5EBC-6FD9-4D08-AD64-C9AADD271E92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,8 +29,8 @@ Global
 		{50901C35-E833-498D-A6DD-4B56A5049825}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50901C35-E833-498D-A6DD-4B56A5049825}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50901C35-E833-498D-A6DD-4B56A5049825}.Release|Any CPU.Build.0 = Release|Any CPU
-		{883F1DF6-895B-407E-AE10-ED88F62C4124}.Debug|Any CPU.ActiveCfg = Debug
-		{883F1DF6-895B-407E-AE10-ED88F62C4124}.Release|Any CPU.ActiveCfg = Release
+		{8E4F5EBC-6FD9-4D08-AD64-C9AADD271E92}.Debug|Any CPU.ActiveCfg = Debug
+		{8E4F5EBC-6FD9-4D08-AD64-C9AADD271E92}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

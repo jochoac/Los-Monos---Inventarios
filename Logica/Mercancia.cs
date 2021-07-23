@@ -102,25 +102,20 @@ namespace Logica
 
         public bool Actualizar_producto(string usu)
         {
-            if(usu == "administrador")
+            Usuario user = new Usuario();
+            user.Nombre_usu = usu;
+            string cargo = user.obtener_cargo();
+            if(cargo == "SU")
             {
                 try
                 {
                     SqlConnection a = conec.conectar();
                     a.Open();
-                    SqlCommand Registro_producto = new SqlCommand("Actualizar_Producto_administrador '" + Codigo + "','" + Nombre + "'," + Existencia + ",'" + Marca + "','" + Tipo + "'", a);
+                    SqlCommand Registro_producto = new SqlCommand("Actualizar_Producto_su '" + Codigo + "','" + Nombre + "'," + Existencia + ",'" + Marca + "','" + Tipo + "'," + Precio, a);
                     SqlDataReader reg = Registro_producto.ExecuteReader();
-
-                    if (reg.Read() == false)
-                    {
-                        a.Close();
-                        return false;
-                    }
-                    else
-                    {
-                        a.Close();
-                        return true;
-                    }
+                    bool b = reg.Read();
+                    a.Close();
+                    return b;
                 }
                 catch (Exception ex)
                 {
@@ -133,19 +128,11 @@ namespace Logica
                 {
                     SqlConnection a = conec.conectar();
                     a.Open();
-                    SqlCommand Registro_producto = new SqlCommand("Actualizar_Producto_su '" + Codigo + "','" + Nombre + "'," + Existencia + ",'" + Marca + "','" + Tipo + "',"+Precio, a);
+                    SqlCommand Registro_producto = new SqlCommand("Actualizar_Producto_administrador '" + Codigo + "','" + Nombre + "'," + Existencia + ",'" + Marca + "','" + Tipo + "'", a);
                     SqlDataReader reg = Registro_producto.ExecuteReader();
-
-                    if (reg.Read() == false)
-                    {
-                        a.Close();
-                        return false;
-                    }
-                    else
-                    {
-                        a.Close();
-                        return true;
-                    }
+                    bool b = reg.Read();
+                    a.Close();
+                    return b;
                 }
                 catch (Exception ex)
                 {
